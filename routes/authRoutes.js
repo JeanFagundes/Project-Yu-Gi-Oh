@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const DeckController = require("../controllers/DeckController")
+const AuthController = require("../controllers/AuthController")
 
 //router.get('/' , DeckController.showCard)
+router.post('/register' , AuthController.registerUserPost)
+
+
 
 module.exports = router;
