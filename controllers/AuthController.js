@@ -14,32 +14,58 @@ module.exports = class UserController {
         } = req.body
 
         //validando se o usuario ja existe no Banco de dados
-        const checkIfEmailExists = await User.findOne({where: { email: email}})
-        if(checkIfEmailExists){
+        const checkIfEmailExists = await User.findOne({
+            where: {
+                email: email
+            }
+        })
+        if (checkIfEmailExists) {
             console.log(email)
-            return res.status(422).json({message: 'Ja existe uma conta com esse email'})
+            return res.status(422).json({
+                message: 'Ja existe uma conta com esse email'
+            })
         }
 
         //validando se o login ja está em uso
-        const checkIfLoginExists = await User.findOne({where: {login: login}})
-        if(checkIfLoginExists){
-            return res.status(422).json({message: 'Ja existe uma conta com esse login'})
+        const checkIfLoginExists = await User.findOne({
+            where: {
+                login: login
+            }
+        })
+        if (checkIfLoginExists) {
+            return res.status(422).json({
+                message: 'Ja existe uma conta com esse login'
+            })
         }
 
         //diversas validações dos campos de cadastro
         if (!validator.isEmail(email)) {
-            return res.status(422).json({ message: 'Insira um email válido.' })
+            return res.status(422).json({
+                message: 'Insira um email válido.'
+            })
         }
-        if (!validator.isLength(login, { min: 4, max: 12 })) {
-            return res.status(422).json({ message: `O login deve ter entre 4 a 12 caracteres` })
+        if (!validator.isLength(login, {
+                min: 4,
+                max: 12
+            })) {
+            return res.status(422).json({
+                message: `O login deve ter entre 4 a 12 caracteres`
+            })
         }
         if (!validator.equals(password, confirmpassword)) {
-            return res.status(422).json({ message: 'As senhas estão diferentes.' })
+            return res.status(422).json({
+                message: 'As senhas estão diferentes.'
+            })
         }
-        if (!validator.isLength(password, {min:4,max: 15})) {
-            return res.status(422).json({ message: 'A senha deve conter entre 6 a 15 caracteres.' })
+        if (!validator.isLength(password, {
+                min: 6,
+                max: 15
+            })) {
+            return res.status(422).json({
+                message: 'A senha deve conter entre 6 a 15 caracteres.'
+            })
         }
-        
+
         //criptografando a senha
         const salt = bcrypt.genSaltSync(10)
         const hashedPassword = bcrypt.hashSync(password, salt)
@@ -49,15 +75,56 @@ module.exports = class UserController {
             login,
             password: hashedPassword
         }
+        //tentando inserir o objeto no banco de dados.
         try {
-           await User.create(user)
-           return res.status(200).json({ message: 'Usuario criado com sucesso'})
-            
+            await User.create(user)
+            return res.status(200).json({
+                message: 'Usuario criado com sucesso'
+            })
+
         } catch (error) {
-            res.status(500).json({ message: 'Não foi possivel criar o usuario: ' + error})
+            res.status(500).json({
+                message: 'Não foi possivel criar o usuario: ' + error
+            })
             return
         }
-
-        res.status(201).json({ user });
     }
+
+    static async loginPost(req, res) {
+
+        const {
+            login,
+            password
+        } = req.body
+        
+        //procurar no banco de dados se o usuario existe
+        const user = await User.findOne({
+            where: {
+                login: login,
+            }
+        })
+        
+        //se ele nao existir enviar uma mensagem de erro de login ou senha
+        if (!user) {
+            return res.status(404).json({
+                message: 'Usuario ou senha invalido'
+            })
+        }
+        
+        //verificando se o password bate com o hash no banco de dados
+        const passwordMatch = bcrypt.compareSync(password, user.password)
+        
+        //se existir o usuario e a senha bater com o BD, logar com o usuario
+        if (passwordMatch) {
+            return res.status(202).json({
+                message: 'Logado com sucesso'
+            })
+        } else {
+            //console.log(user , login)
+            return res.status(406).json({
+                message: 'Usuario ou senha invalido'
+            })
+        }
+    }
+
 }
