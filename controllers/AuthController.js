@@ -1,6 +1,7 @@
 const User = require('../Models/User')
 const bcrypt = require("bcrypt")
 const validator = require('validator')
+const modulosToken = require('../helpers/modulosToken')
 
 module.exports = class UserController {
 
@@ -20,7 +21,6 @@ module.exports = class UserController {
             }
         })
         if (checkIfEmailExists) {
-            console.log(email)
             return res.status(422).json({
                 message: 'Ja existe uma conta com esse email'
             })
@@ -78,9 +78,8 @@ module.exports = class UserController {
         //tentando inserir o objeto no banco de dados.
         try {
             await User.create(user)
-            return res.status(200).json({
-                message: 'Usuario criado com sucesso'
-            })
+            
+            await modulosToken.createUserToken(user , req , res)
 
         } catch (error) {
             res.status(500).json({
@@ -106,7 +105,7 @@ module.exports = class UserController {
         
         //se ele nao existir enviar uma mensagem de erro de login ou senha
         if (!user) {
-            return res.status(404).json({
+            return res.status(422).json({
                 message: 'Usuario ou senha invalido'
             })
         }
@@ -116,12 +115,12 @@ module.exports = class UserController {
         
         //se existir o usuario e a senha bater com o BD, logar com o usuario
         if (passwordMatch) {
-            return res.status(202).json({
-                message: 'Logado com sucesso'
-            })
+            console.log('logado com sucesso.')
+            return await modulosToken.createUserToken(user , req , res)
+           
         } else {
             //console.log(user , login)
-            return res.status(406).json({
+            return res.status(422).json({
                 message: 'Usuario ou senha invalido'
             })
         }
