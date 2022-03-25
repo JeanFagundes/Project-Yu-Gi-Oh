@@ -2,6 +2,8 @@ const User = require('../Models/User')
 const bcrypt = require("bcrypt")
 const validator = require('validator')
 const modulosToken = require('../helpers/modulosToken')
+const jwt = require('jsonwebtoken');
+
 
 module.exports = class UserController {
 
@@ -124,6 +126,24 @@ module.exports = class UserController {
                 message: 'Usuario ou senha invalido'
             })
         }
+    }
+
+    static async checkUser (req, res) {
+
+        let currentUser
+
+        if (req.headers.authorization){
+
+        const token = await modulosToken.getToken(req)
+        const decoded = jwt.verify(token.authHeader , token.secret)
+            
+        currentUser = await User.findByPk(decoded.id)
+        currentUser.password = undefined
+
+        }else {
+            currentUser = 'null'
+        }
+        res.status(200).send(currentUser)
     }
 
 }

@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const secret  = "my_secret"
 
 module.exports = {
-
     async createUserToken (user, req, res){
         
         const token = jwt.sign({
@@ -16,5 +15,14 @@ module.exports = {
             token : token,
             userId : user.id
         })
+    },
+
+    async getToken(req){
+
+        const authHeader = req.headers.authorization
+        const data = {authHeader, secret}
+        return data
+
     }
 }
+
