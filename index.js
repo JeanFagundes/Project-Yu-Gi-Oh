@@ -33,7 +33,8 @@ app.use('/', authRoutes)
 //app.get('/',MenuController.showMenu);
 
 conn
-  .sync()
+.sync()
+  //.sync({alter : true})
   //.sync({force: true})
   .then(() => {
     app.listen(3000);

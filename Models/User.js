@@ -29,7 +29,13 @@ const User = db.define('User', {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
-    },
+    }, 
+}, {
+    scopes: {
+        withoutPassword: {
+          attributes: { exclude: ['password'] },
+        }
+      }
 });
 
 module.exports = User;

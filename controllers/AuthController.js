@@ -80,8 +80,8 @@ module.exports = class UserController {
         //tentando inserir o objeto no banco de dados.
         try {
             await User.create(user)
-            
-            await modulosToken.createUserToken(user , req , res)
+
+            await modulosToken.createUserToken(user, req, res)
 
         } catch (error) {
             res.status(500).json({
@@ -97,29 +97,29 @@ module.exports = class UserController {
             login,
             password
         } = req.body
-        
+
         //procurar no banco de dados se o usuario existe
         const user = await User.findOne({
             where: {
                 login: login,
             }
         })
-        
+
         //se ele nao existir enviar uma mensagem de erro de login ou senha
         if (!user) {
             return res.status(422).json({
                 message: 'Usuario ou senha invalido'
             })
         }
-        
+
         //verificando se o password bate com o hash no banco de dados
         const passwordMatch = bcrypt.compareSync(password, user.password)
-        
+
         //se existir o usuario e a senha bater com o BD, logar com o usuario
         if (passwordMatch) {
             console.log('logado com sucesso.')
-            return await modulosToken.createUserToken(user , req , res)
-           
+            return await modulosToken.createUserToken(user, req, res)
+
         } else {
             //console.log(user , login)
             return res.status(422).json({
@@ -128,22 +128,196 @@ module.exports = class UserController {
         }
     }
 
-    static async checkUser (req, res) {
+    static async checkUser(req, res) {
 
         let currentUser
+        //verificando se o token veio pelo header
+        if (req.headers.authorization) {
 
-        if (req.headers.authorization){
+            //verificando se o token está correto
+            const token = await modulosToken.getToken(req)
+            const decoded = jwt.verify(token.authHeader, token.secret)
 
-        const token = await modulosToken.getToken(req)
-        const decoded = jwt.verify(token.authHeader , token.secret)
-            
-        currentUser = await User.findByPk(decoded.id)
-        currentUser.password = undefined
+            //buscando o usuario no BD de acordo com o token informado,
+            //Tambem exclui informação do password por meio de scope no model
+            currentUser = await User.scope('withoutPassword').findByPk(decoded.id)
 
-        }else {
-            currentUser = 'null'
+        } else {
+            currentUser = null
         }
         res.status(200).send(currentUser)
     }
 
+    static async getUserById(req, res) {
+        const id = req.params.id
+
+        const user = await User.scope('withoutPassword').findByPk(id)
+
+        if (!user) {
+            return res.status(422).json({
+                message: 'Usuario não encontrado'
+            })
+        }
+        res.status(200).json({
+            user
+        })
+    }
+
+    static async editUser(req, res) {
+        const edit = req.params.name
+        //buscar token do usuario
+        const token = await modulosToken.getToken(req)
+
+        //buscar o ID do usuario pelo Token
+        const user = await modulosToken.getUserByToken(token)
+
+        if (!user) {
+            return res.status(422).json({
+                message: 'Usuario não encontrado'
+            })
+        }
+
+        const {
+            login,
+            currentpassword,
+            password,
+            confirmpassword
+        } = req.body
+
+        //alterar login
+        //se o parametro for para editar login
+        if (edit === 'login') {
+
+            if (!validator.isLength(login, {
+                    min: 4,
+                    max: 12
+                })) {
+                return res.status(422).json({
+                    message: `O login deve ter entre 4 a 12 caracteres`
+                })
+            }
+
+            const checkIfLoginExists = await User.findOne({
+                where: {
+                    login: login
+                }
+            })
+            if (checkIfLoginExists) {
+                return res.status(422).json({
+                    message: 'Ja existe uma conta com esse login'
+                })
+            }
+
+            if (!validator.equals(password, confirmpassword)) {
+                return res.status(422).json({
+                    message: 'As senhas estão diferentes'
+                })
+            }
+
+            const passwordMatch = bcrypt.compareSync(password, user.password)
+
+            if (!passwordMatch) {
+                return res.status(422).json({
+                    message: 'Senha invalida, não podemos alterar o login'
+                })
+            }
+
+            try {
+                //atualizando no banco de dados o login
+
+                return res.status(200).json({
+                    message: "Login alterado com sucesso",
+                })
+
+            } catch (error) {
+                return res.status(500).json({
+                    message: 'Não foi possivel alterar o login',
+                    error: error.message,
+                })
+            }
+        }
+
+        //alterar senha
+        if (edit === 'password') {
+
+            //verificando se a senha atual esta correta
+            const currentPasswordMatch = bcrypt.compareSync(currentpassword, user.password)
+
+            if (!currentPasswordMatch) {
+                return res.status(422).json({
+                    message: 'Senha atual incorreta'
+                })
+            }
+
+            if (!validator.isLength(password, {
+                    min: 6,
+                    max: 15
+                })) {
+                return res.status(422).json({
+                    message: 'A senha deve conter entre 6 a 15 caracteres.'
+                })
+            }
+
+            if (!validator.equals(password, confirmpassword)) {
+                return res.status(422).json({
+                    message: 'As senhas para alterar estão incorretas'
+                })
+            }
+
+            //verificando se a senha para alterar está igual a atual
+            if (bcrypt.compareSync(password, user.password)) {
+                return res.status(422).json({
+                    message: 'Senha para alterar está igual a atual, insira outra senha'
+                })
+            }
+
+            const salt = bcrypt.genSaltSync(10)
+            const hashedPassword = bcrypt.hashSync(password, salt)
+
+            try {
+                //atualizando no banco de dados a senha
+                await User.update({
+                    password: hashedPassword
+                }, {
+                    where: {
+                        id: user.id
+                    }
+                })
+
+                return res.status(200).json({
+                    message: "Senha alterada com sucesso",
+                })
+
+            } catch (error) {
+                return res.status(500).json({
+                    message: 'Não foi possivel alterar a senha',
+                    error: error.message,
+                })
+            }
+        }
+    }
+
+    static async myStatistics(req, res) {
+        const id = req.params.id
+
+        const user = await User.findOne({
+            attributes: ['login', 'vitoria', 'derrota', ]
+        }, {
+            where: {
+                id: id
+            }
+        })
+
+        res.status(200).json(user)
+    }
+
+    static async ranking(req, res) {
+
+        const rank = await User.findAll({
+            attributes: ['login', 'vitoria', 'derrota']
+        }, {
+            order:['vitoria', 'DESC']
+        })
+        res.status(200).json(rank)
+    }
 }
