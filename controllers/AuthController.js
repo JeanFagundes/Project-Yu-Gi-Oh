@@ -316,7 +316,7 @@ module.exports = class UserController {
         const rank = await User.findAll({
             attributes: ['login', 'vitoria', 'derrota']
         }, {
-            order:['vitoria', 'DESC']
+            order: ['vitoria', 'DESC']
         })
         res.status(200).json(rank)
     }
