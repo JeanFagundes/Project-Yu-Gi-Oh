@@ -11,7 +11,7 @@ const conn = require('./db/conn');
 const User = require('./models/User')
 
 //importar rotas
-const cardRoutes = require('./routes/cardRoutes');
+const cardRoutes = require('./routes/deckRoutes');
 const menuRoutes = require('./routes/menuRoutes')
 const authRoutes = require('./routes/authRoutes')
 
