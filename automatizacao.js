@@ -1,6 +1,10 @@
 const fs = require('fs');
+
 let i = 1,
     j = 0
+let deckCacador = []
+let carta;
+
 
 if (!fs.existsSync('decks')) {
     fs.mkdirSync('decks')
@@ -8,171 +12,177 @@ if (!fs.existsSync('decks')) {
     fs.mkdirSync('decks/mago')
 }
 
-criarCartasCacador(i , j)
+criarCartasCacador(i, j)
 
 //função para criar as cartas
-function criarCartasCacador(i , j) {
-    while (i < 23) {
+async function arrayDeck(carta) {
 
-        let carta = getCartaLacaioCacador(j)
-    
-        carta[0].tipo = 'fera'
-        carta[0].classe = 'lacaio'
-        carta[0].id = i
-    
-        let path = `decks/cacador/${carta[0].nome}.json`
+    deckCacador.push(carta)
+
+    return deckCacador
+}
+
+
+
+async function criarCartasCacador(i, j) {
+
+    while (i < 4) {
+
+        carta = getCartaLacaioCacador(j)
+
+        
+        carta.tipo = "fera"
+        carta.classe = 'lacaio'
+        carta.id = i
+        
+        //console.log(carta)
+        console.log(carta.id)
+
+        deckCacador.push(carta)
+
+        let converterParaString = JSON.stringify(carta)
+        console.log(converterParaString)
+        
+             try {
+                 console.log('entrou')
+                fs.appendFileSync('decks/cacador/arraydecartas.json', converterParaString.concat(','))         
+             } catch (error) {
+                 console.log('entrou no erro')
+                 console.log(error)
+             }   
+        
+                                 
+        let path = `decks/cacador/${carta.nome}.json`
         criarCarta(carta, path)
-    
-        let path2 = `decks/cacador/${carta[0].nome}2.json`
-        carta[0].id = i + 1
-    
+        
+        let path2 = `decks/cacador/${carta.nome}2.json`
+        
+        carta.id +=1
+
+        //deckCacador.push(carta)
+
         criarCarta(carta, path2)
         i += 2, j++
-    }
-    j=0
-    while (i < 31) { 
-        let carta = getCartaArcanaCacador(j)
-    
-        carta[0].tipo = ''
-        carta[0].classe = 'Arcana'
-        carta[0].id = i
-    
-        path = `decks/cacador/${carta[0].nome}.json`
-        criarCarta(carta, path)
-    
-        path2 = `decks/cacador/${carta[0].nome}2.json`
-        carta[0].id = i+1
-        criarCarta(carta, path2)
 
-        i += 2, j++
     }
-    return
+
+    j = 0
+
 }
 
 function getCartaLacaioCacador(j) {
 
     let javaliPedratrusco = [{
-        id: 0,
         nome: 'Javali Pedratrusco',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
-        descricao: ''
+        mana: 1,
+        ataque: 1,
+        defesa: 1,
+        classe: 'Lacaio',
+        tipo: 'Fera',
+        descricao: 'Investida'
     }]
 
     let crocoliscoDoRio = [{
-        id: 0,
         nome: 'Crocolisco Do Rio',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
+        mana: 2,
+        ataque: 2,
+        defesa: 3,
+        classe: 'Lacaio',
+        tipo: 'Fera',
         descricao: ''
     }]
 
     let raptorDinossangue = [{
-        id: 0,
         nome: 'Raptor Dinossangue',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
+        mana: 2,
+        ataque: 3,
+        defesa: 2,
+        classe: 'Lacaio',
+        tipo: 'Fera',
         descricao: ''
     }]
 
     let cacadoraDoUrzal = [{
-        id: 0,
         nome: 'Cacadora Do Urzal',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
-        descricao: ''
+        mana: 3,
+        ataque: 2,
+        defesa: 3,
+        classe: 'Lacaio',
+        tipo: 'Neutro',
+        descricao: 'Evoque um javali 1/1'
     }]
 
     let carabineiroDeAltaforja = [{
-        id: 0,
         nome: 'Carabineiro De Altaforja',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
-        descricao: ''
+        mana: 3,
+        ataque: 2,
+        defesa: 2,
+        classe: 'Lacaio',
+        tipo: 'Neutro',
+        descricao: 'Cause 1 de dano'
     }]
 
     let liderDoRaide = [{
-        id: 0,
         nome: 'Lider Do Raide',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
-        descricao: ''
+        mana: 3,
+        ataque: 2,
+        defesa: 3,
+        classe: 'Lacaio',
+        tipo: 'Neutro',
+        descricao: 'Seus outros lacario ganha +1 de ataque'
     }]
 
     let patriarcaCostalva = [{
-        id: 0,
         nome: 'Patriarca Costalva',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
+        mana: 3,
+        ataque: 1,
+        defesa: 4,
+        classe: 'Lacaio',
+        tipo: 'Fera',
         descricao: ''
     }]
 
     let mestreDeMatilha = [{
-        id: 0,
         nome: 'Mestre De Matilha',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
-        descricao: ''
+        mana: 4,
+        ataque: 4,
+        defesa: 3,
+        classe: 'Lacaio',
+        tipo: 'Neutro',
+        descricao: 'Concede +2/+2 a uma fera aliada'
     }]
 
     let mordeliscaDoOasis = [{
-        id: 0,
         nome: 'Mordelisca Do Oasis',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
+        mana: 4,
+        ataque: 2,
+        defesa: 7,
+        classe: 'Lacaio',
+        tipo: 'Fera',
         descricao: ''
     }]
 
     let comandoLancatroz = [{
-        id: 0,
         nome: 'Comando Lancatroz',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
-        descricao: ''
+        mana: 5,
+        ataque: 4,
+        defesa: 2,
+        classe: 'Lacaio',
+        tipo: 'Neutro',
+        descricao: 'cause 2 dano'
     }]
 
     let caoMagna = [{
-        id: 0,
         nome: 'Cao Magna',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
-        tipo: '',
+        mana: 7,
+        ataque: 9,
+        defesa: 5,
+        classe: 'Lacaio',
+        tipo: 'Fera',
         descricao: ''
     }]
 
-    let cartasLacaio = [javaliPedratrusco, crocoliscoDoRio,
+    const cartasLacaio = [javaliPedratrusco, crocoliscoDoRio,
         raptorDinossangue, cacadoraDoUrzal, carabineiroDeAltaforja, liderDoRaide, patriarcaCostalva,
         mestreDeMatilha, mordeliscaDoOasis, comandoLancatroz, caoMagna
     ]
@@ -182,56 +192,53 @@ function getCartaLacaioCacador(j) {
 }
 
 function getCartaArcanaCacador(j) {
+
     let ferirPresa = [{
-        id: 0,
         nome: 'Ferir Presa',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
+        mana: 1,
+        ataque: '',
+        defesa: '',
+        classe: 'Arcana',
         tipo: '',
-        descricao: ''
+        descricao: 'Causa 1 de dano, '
     }]
     let tiroArcano = [{
-        id: 0,
         nome: 'Tiro Arcano',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
+        mana: 1,
+        ataque: '',
+        defesa: '',
+        classe: 'Arcana',
         tipo: '',
-        descricao: ''
+        descricao: 'Cause 2 de dano'
     }]
     let tiroMultiplo = [{
-        id: 0,
         nome: 'Tiro Multiplo',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
+        mana: 4,
+        ataque: '',
+        defesa: '',
+        classe: 'Arcana',
         tipo: '',
-        descricao: ''
+        descricao: 'Cause 3 de dano a dois lacaios diferentes'
     }]
 
     let rastreamento = [{
-        id: 0,
         nome: 'Rastreamento',
-        mana: 0,
-        ataque: 0,
-        defesa: 0,
-        classe: '',
+        mana: 2,
+        ataque: '',
+        defesa: '',
+        classe: 'Arcana',
         tipo: '',
-        descricao: ''
+        descricao: 'Compre 2 cartas'
     }]
 
     let cartasArcana = [ferirPresa, rastreamento, tiroArcano, tiroMultiplo]
 
     return cartasArcana[j];
-    
+
 }
 
-function criarCartarGuerreiro(i , j ){
-
+function criarCartarGuerreiro(i, j) {
+    
 }
 
 function criarCarta(carta, path) {
@@ -240,22 +247,5 @@ function criarCarta(carta, path) {
 
     fs.writeFileSync(path, converterParaString)
 
-    // fs.writeFileSync(path2, converterParaString)
-
     return
 }
-
-
-// function checarCarta(carta, path) {
-
-
-//     if(!fs.existsSync(`decks/cacador/${carta[0].nome}2.json`)){
-
-//         path = `decks/cacador/${carta[0].nome}2.json`
-//         carta[0].tipo = 'fera'
-//         carta[0].classe = 'lacaio'
-
-//     }
-
-// return
-// }
