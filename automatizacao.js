@@ -68,7 +68,7 @@ function getCartaLacaioCacador(j) {
     defesa: 1,
     classe: "Lacaio",
     tipo: "Fera",
-    descricao: "Investida",
+    efeito: "Investida",
   }];
 
   const crocoliscoDoRio = [{
@@ -78,7 +78,7 @@ function getCartaLacaioCacador(j) {
     defesa: 3,
     classe: "Lacaio",
     tipo: "Fera",
-    descricao: "",
+    efeito: "",
   }];
 
   const raptorDinossangue = [{
@@ -88,7 +88,7 @@ function getCartaLacaioCacador(j) {
     defesa: 2,
     classe: "Lacaio",
     tipo: "Fera",
-    descricao: "",
+    efeito: "",
   }];
 
   const cacadoraDoUrzal = [{
@@ -98,7 +98,7 @@ function getCartaLacaioCacador(j) {
     defesa: 3,
     classe: "Lacaio",
     tipo: "Neutro",
-    descricao: "Evoque um javali 1/1",
+    efeito: "Evoque um javali 1/1",
   }];
 
   const carabineiroDeAltaforja = [{
@@ -108,7 +108,7 @@ function getCartaLacaioCacador(j) {
     defesa: 2,
     classe: "Lacaio",
     tipo: "Neutro",
-    descricao: "Cause 1 de dano",
+    efeito: "Cause 1 de dano",
   }];
 
   const liderDoRaide = [{
@@ -118,7 +118,7 @@ function getCartaLacaioCacador(j) {
     defesa: 3,
     classe: "Lacaio",
     tipo: "Neutro",
-    descricao: "Seus outros lacario ganha +1 de ataque",
+    efeito: "Seus outros lacario ganha +1 de ataque",
   }];
 
   const patriarcaCostalva = [{
@@ -128,7 +128,7 @@ function getCartaLacaioCacador(j) {
     defesa: 4,
     classe: "Lacaio",
     tipo: "Fera",
-    descricao: "",
+    efeito: "",
   }];
 
   const mestreDeMatilha = [{
@@ -138,7 +138,7 @@ function getCartaLacaioCacador(j) {
     defesa: 3,
     classe: "Lacaio",
     tipo: "Neutro",
-    descricao: "Concede +2/+2 a uma fera aliada",
+    efeito: "Concede +2/+2 a uma fera aliada",
   }];
 
   const mordeliscaDoOasis = [{
@@ -148,7 +148,7 @@ function getCartaLacaioCacador(j) {
     defesa: 7,
     classe: "Lacaio",
     tipo: "Fera",
-    descricao: "",
+    efeito: "",
   }];
 
   const comandoLancatroz = [{
@@ -158,7 +158,7 @@ function getCartaLacaioCacador(j) {
     defesa: 2,
     classe: "Lacaio",
     tipo: "Neutro",
-    descricao: "cause 2 dano",
+    efeito: "cause 2 dano",
   }];
 
   const caoMagna = [{
@@ -168,7 +168,7 @@ function getCartaLacaioCacador(j) {
     defesa: 5,
     classe: "Lacaio",
     tipo: "Fera",
-    descricao: "",
+    efeito: "",
   }];
 
   const cartasLacaio = [javaliPedratrusco, crocoliscoDoRio,
@@ -187,7 +187,7 @@ function getCartaArcanaCacador(j) {
     defesa: "",
     classe: "Arcana",
     tipo: "",
-    descricao: "Causa 1 de dano, ",
+    efeito: "Causa 1 de dano, ",
   }];
   const tiroArcano = [{
     nome: "Tiro Arcano",
@@ -196,7 +196,7 @@ function getCartaArcanaCacador(j) {
     defesa: "",
     classe: "Arcana",
     tipo: "",
-    descricao: "Cause 2 de dano",
+    efeito: "Cause 2 de dano",
   }];
   const tiroMultiplo = [{
     nome: "Tiro Multiplo",
@@ -205,7 +205,7 @@ function getCartaArcanaCacador(j) {
     defesa: "",
     classe: "Arcana",
     tipo: "",
-    descricao: "Cause 3 de dano a dois lacaios diferentes",
+    efeito: "Cause 3 de dano a dois lacaios diferentes",
   }];
 
   const rastreamento = [{
@@ -215,7 +215,7 @@ function getCartaArcanaCacador(j) {
     defesa: "",
     classe: "Arcana",
     tipo: "",
-    descricao: "Compre 2 cartas",
+    efeito: "Compre 2 cartas",
   }];
 
   const cartasArcana = [ferirPresa, rastreamento, tiroArcano, tiroMultiplo];

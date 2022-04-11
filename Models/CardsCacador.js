@@ -4,7 +4,7 @@ const {
 
 const db = require("../db/conn");
 
-const Cards = db.define("Cards", {
+const CardsCacador = db.define("CardsCacador", {
 
   nome: {
     type: DataTypes.STRING,
@@ -17,6 +17,7 @@ const Cards = db.define("Cards", {
   },
   ataque: {
     type: DataTypes.INTEGER,
+    allowNull: true,
   },
   defesa: {
     type: DataTypes.INTEGER,
@@ -31,9 +32,9 @@ const Cards = db.define("Cards", {
     require: true,
     allowNull: false,
   },
-  descricao: {
+  efeito: {
     type: DataTypes.STRING,
   },
 });
 
-module.exports = Cards;
+module.exports = CardsCacador;
