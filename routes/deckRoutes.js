@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const DeckController = require("../controllers/DeckController")
+const express = require("express");
 
-//router.get('/' , DeckController.showCard)
+const router = express.Router();
+const DeckController = require("../controllers/DeckController");
+
+// router.get('/' , DeckController.showCard)
 
 module.exports = router;

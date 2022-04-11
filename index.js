@@ -1,41 +1,33 @@
-const fs = require('fs');
-const {json} = require('express/lib/response')
-const { stringify } = require('querystring');
-const express = require('express');
+const express = require("express");
 
 const app = express();
 
-const conn = require('./db/conn');
+const conn = require("./db/conn");
 
-//models
-const User = require('./models/User')
+// models
 
-//importar rotas
-const cardRoutes = require('./routes/deckRoutes');
-const menuRoutes = require('./routes/menuRoutes')
-const authRoutes = require('./routes/authRoutes')
+// importar rotas
+const cardRoutes = require("./routes/deckRoutes");
+const authRoutes = require("./routes/authRoutes");
 
-//importas controllers
-const DeckController = require('./controllers/DeckController')
-const MenuController = require('./controllers/MenuController')
-const AuthController = require('./controllers/AuthController')
+// importas controllers
 
-//receber respostas do body
+// receber respostas do body
 app.use(express.urlencoded({
-    extended:true,
-}))
-app.use(express.json())
+  extended: true,
+}));
+app.use(express.json());
 
-//routes
-app.use('/',cardRoutes);
-app.use('/', authRoutes)
+// routes
+app.use("/", cardRoutes);
+app.use("/", authRoutes);
 
-//app.get('/',MenuController.showMenu);
+// app.get('/',MenuController.showMenu);
 
 conn
-.sync()
-  //.sync({alter : true})
-  //.sync({force: true})
+  .sync()
+  // .sync({alter : true})
+  // .sync({force: true})
   .then(() => {
     app.listen(3000);
   })
