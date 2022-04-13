@@ -6,10 +6,11 @@ async function criarArrayDeckCacador() {
     attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true,
   });
 
-  for (let i = 0; i < cartasCacador.length; i += 1) {
-    arrayCacador.push(cartasCacador[i]);
-  }
+  cartasCacador.forEach((element) => {
+    arrayCacador.push(element);
+  });
 
-  return console.log(cartasCacador);
+  return console.log(arrayCacador);
 }
+
 criarArrayDeckCacador();

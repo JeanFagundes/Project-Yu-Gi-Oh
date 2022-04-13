@@ -170,8 +170,8 @@ async function createDeckCacador() {
 
   try {
     const cartasLacaios = getCartasCacador();
-    CardsCacador.bulkCreate(cartasLacaios);
-    CardsCacador.bulkCreate(cartasLacaios);
+    await CardsCacador.bulkCreate(cartasLacaios);
+    await CardsCacador.bulkCreate(cartasLacaios);
   } catch (err) {
     console.log(err.message);
   }
