@@ -28,11 +28,11 @@ app.use("/", authRoutes);
 // app.get('/',MenuController.showMenu);
 
 conn
-// .sync()
-  .sync({ alter: true })
+ .sync()
+  //.sync({ alter: true })
   // .sync({force: true})
   .then(() => {
     app.listen(3000);
-    const createDeckCacador = require('./helpers/adicionarCartasNoBD')
+    require('./helpers/adicionarCartasNoBD')
   })
   .catch((err) => console.log(err));

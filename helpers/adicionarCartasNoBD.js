@@ -170,18 +170,10 @@ async function createDeckCacador() {
 
   try {
     const cartasLacaios = getCartasCacador();
-
-    for (let i = 0; i < cartasLacaios.length; i += 1) {
-      const cont = true;
-
-      CardsCacador.create(cartasLacaios[i]);
-      if (cont) {
-        CardsCacador.create(cartasLacaios[i]);
-      }
-    }
+    CardsCacador.bulkCreate(cartasLacaios);
+    CardsCacador.bulkCreate(cartasLacaios);
   } catch (err) {
     console.log(err.message);
   }
 }
-
 createDeckCacador();
