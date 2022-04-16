@@ -6,6 +6,7 @@ const conn = require("./db/conn");
 
 // models
 const cardsCacador = require("./models/CardsCacador");
+const cardsGuerreiro = require("./models/CardsGuerreiro");
 
 // criação de cartas para o banco de Dados na primeira execução
 
